@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LivingCostAppTheme {
+                TypeSafe
                 setContent {
                     MyApp {
                         AppNavigator()
@@ -55,6 +56,11 @@ class MainActivity : ComponentActivity() {
         MyApp {
             AppNavigator()
         }
-
     }
+//    override fun onSupportNavigateUp(): Boolean {
+//        // Obsługa przycisku cofania
+//        val navHostFragment =
+//            supportFragmen00tManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//        return navHostFragment.navController.navigateUp() || super.onSupportNavigateUp()
+//    }
 }
