@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.livingcostapp.R
 
-class WelcomeScreenFragment : Fragment()
-{
+class WelcomeScreenFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -18,10 +17,14 @@ class WelcomeScreenFragment : Fragment()
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-//                WelcomeScreen {
-//                    findNavController().navigate(R.id.action_welcome_to_login)
-//                }
+                WelcomeScreenView(
+                    onLoginClick = {
+                        // Obsługa nawigacji do ekranu logowania
+                        //    findNavController().navigate
+                    }
+                )
             }
         }
     }
 }
+
