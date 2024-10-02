@@ -21,45 +21,43 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LivingCostAppTheme {
-                setContent {
-                    MyApp {
-                        AppNavigator()
-                    }
+                MyApp {
+                    AppNavigator()
                 }
             }
         }
     }
+}
 
-    @Composable
-    fun MyApp(content: @Composable () -> Unit) {
-        MaterialTheme {
-            Surface {
-                content()
-            }
+@Composable
+fun MyApp(content: @Composable () -> Unit) {
+    MaterialTheme {
+        Surface {
+            content()
         }
     }
+}
 
-    @Composable
-    fun AppNavigator() {
-        val navController = rememberNavController()
+@Composable
+fun AppNavigator() {
+    val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = "welcome") {
-            composable("welcome") { WelcomeScreen(navController) }
-            composable("login") { LoginScreen(navController) }
-        }
+    NavHost(navController = navController, startDestination = "welcome") {
+        composable("welcome") { WelcomeScreen(navController) }
+        composable("login") { LoginScreen(navController) }
     }
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        MyApp {
-            AppNavigator()
-        }
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyApp {
+        AppNavigator()
     }
+}
 //    override fun onSupportNavigateUp(): Boolean {
 //        // Obsługa przycisku cofania
 //        val navHostFragment =
 //            supportFragmen00tManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 //        return navHostFragment.navController.navigateUp() || super.onSupportNavigateUp()
 //    }
-}
