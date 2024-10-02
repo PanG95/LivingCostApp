@@ -6,11 +6,10 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
 class WelcomeScreen(navController: NavHostController) : ViewModel() {
-//    fun onLoginClicked() {
-//        viewModelScope.launch {
-//            // Obsłuż kliknięcie przycisku "Zaloguj"
-//            println("Zaloguj kliknięty")
-//        }
-//    }
+    fun onLoginClicked() {
+        viewModelScope.launch {
+            println("Zaloguj kliknięty")
+        }
+    }
 
 }
