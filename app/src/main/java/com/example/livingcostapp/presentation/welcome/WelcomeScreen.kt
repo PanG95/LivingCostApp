@@ -1,19 +1,18 @@
 package com.example.livingcostapp.presentation.welcome
 
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
-class WelcomeScreen(navController: NavHostController) : ViewModel() {
-
-//    fun onLoginClicked() {
-//        viewModelScope.launch {
-//            WelcomeScreenView {
-//
-//            }
-//            println("Zaloguj kliknięty")
-//        }
-//    }
-
+@Composable
+fun WelcomeScreen(navController: NavController) {
+    WelcomeScreenView(
+        onLoginClick = {
+            navController.navigate("login")
+        }
+    )
 }

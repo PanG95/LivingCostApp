@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livingcostapp.presentation.welcome.WelcomeScreen
 import com.example.livingcostapp.presentation.login.LoginScreen
+import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
 import com.example.livingcostapp.ui.theme.LivingCostAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,7 +44,8 @@ fun AppNavigator() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "welcome") {
-        composable("welcome") { WelcomeScreen(navController) }
+        composable("welcome") {
+            WelcomeScreen(navController) }
         composable("login") { LoginScreen(navController) }
     }
 }
