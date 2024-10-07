@@ -10,8 +10,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.livingcostapp.presentation.welcome.WelcomeScreen
-import com.example.livingcostapp.presentation.login.LoginScreen
+import com.example.livingcostapp.presentation.login.LoginScreenView
+import com.example.livingcostapp.presentation.mainScreen.MainScreenView
+import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsScreenView
+import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesScreenView
+import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
+import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
 import com.example.livingcostapp.ui.theme.LivingCostAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,10 +48,31 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
 
         NavHost(navController = navController, startDestination = "welcome") {
-            composable("welcome") { WelcomeScreen(navController) }
-            composable("login") { LoginScreen(navController) }
+            composable("welcome") {
+                WelcomeScreenView(onLoginClick = {
+                    navController.navigate("login")
+                })
+            }
+            composable("login") {
+                LoginScreenView(onLoginClick = {
+                    navController.navigate("main")
+                })
+            }
+            composable("main") {
+                MainScreenView(navController = navController)
+            }
+            composable("savings") {
+                SavingsScreenView()
+            }
+            composable("expenses") {
+                ExpensesScreenView()
+            }
+            composable("earnings") {
+                EarningsScreenView()
+            }
         }
     }
+
 
     @Preview(showBackground = true)
     @Composable
