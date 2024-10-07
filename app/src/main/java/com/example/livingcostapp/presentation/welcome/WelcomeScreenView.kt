@@ -42,3 +42,9 @@ fun WelcomeScreenView(onLoginClick: () -> Unit) {
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewWelcomeScreenView() {
+    WelcomeScreenView(onLoginClick = {})
+}
