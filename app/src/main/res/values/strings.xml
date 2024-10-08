@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LivingCostApp</string>
+    <string name="savings">Oszczędności</string>
+
 </resources>
