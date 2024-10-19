@@ -18,9 +18,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
+import com.example.livingcostapp.presentation.welcome.WelcomeViewModel
 
 @Composable
-fun LoginScreenView(onLoginClick: () -> Unit) {
+fun LoginScreenView(state: LoginViewModel.LoginScreenState, onLoginClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,8 +46,8 @@ fun LoginScreenView(onLoginClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreenView() {
-    LoginScreenView(onLoginClick = {})
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewLoginScreenView() {
+//    LoginScreenView(onLoginClick = {})
+//}

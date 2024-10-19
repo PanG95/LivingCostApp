@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun WelcomeScreenView(onLoginClick: () -> Unit) {
+fun WelcomeScreenView(state: WelcomeViewModel.WelcomeScreenState, onLoginClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -26,7 +26,7 @@ fun WelcomeScreenView(onLoginClick: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Koszty Życia",
+            text = state.title,
             fontSize = 32.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -41,10 +41,4 @@ fun WelcomeScreenView(onLoginClick: () -> Unit) {
             Text(text = "Zaloguj")
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewWelcomeScreenView() {
-    WelcomeScreenView(onLoginClick = {})
 }
