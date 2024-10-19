@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -87,41 +89,104 @@ fun MainScreenView(navController: NavController) {
                         .padding(bottom = 24.dp)
                 )
 
-                // Boxes
                 Box(
                     modifier = Modifier
+                        .padding(bottom = 24.dp)
                         .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(bottom = 16.dp)
+                        .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
                             navController.navigate("expenses")
-                            expensesState.value += 50
+                            expensesState.value += 400
                         },
                     contentAlignment = Alignment.Center
-                ) {
-                    Text("Wydatki: ${expensesState.value} PLN", fontSize = 30.sp)
-                }
 
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.Top
+                    )
+
+                    {
+                        Text(
+                            text = "Wydatki",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp)
+                                .background(
+                                    Color.Blue,
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .align(Alignment.CenterHorizontally)
+                                .padding(9.dp)
+                        ) {
+                            Text(
+                                text = "${expensesState.value}",
+                                fontSize = 20.sp,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+
+                            )
+                        }
+                    }
+                }
                 Box(
                     modifier = Modifier
+                        .padding(bottom = 24.dp)
                         .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(bottom = 16.dp)
+                        .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
                             navController.navigate("earnings")
-                            earningsState.value += 100
+                            earningsState.value += 900
                         },
                     contentAlignment = Alignment.Center
-                ) {
-                    Text("Przychodz: ${earningsState.value}", fontSize = 30.sp)
-                }
 
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.Top
+                    )
+
+                    {
+                        Text(
+                            text = "Przychód",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(100.dp)
+                                .background(
+                                    Color.Blue,
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .align(Alignment.CenterHorizontally)
+                                .padding(9.dp)
+                        ) {
+                            Text(
+                                text = "${earningsState.value}",
+                                fontSize = 20.sp,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+
+                            )
+                        }
+                    }
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
                             navController.navigate("savings")
