@@ -16,7 +16,7 @@ class WelcomeViewModel : ViewModel() {
     fun handleAction(action: WelcomeUiAction) {
         when (action) {
             is WelcomeUiAction.LoginClick -> {
-                // Handle login click
+                _state.update { it.copy(navigateToLogin = true) }
             }
         }
     }

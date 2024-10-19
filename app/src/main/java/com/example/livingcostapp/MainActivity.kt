@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livingcostapp.presentation.login.LoginScreenView
+import com.example.livingcostapp.presentation.login.LoginUiAction
 import com.example.livingcostapp.presentation.login.LoginViewModel
 import com.example.livingcostapp.presentation.mainScreen.MainScreenView
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsScreenView
@@ -75,9 +76,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
             composable("login") {
-                LoginScreenView(onLoginClick = {
-                    navController.navigate("main")
+                val state by loginViewModel.state.collectAsState()
+                LoginScreenView(state = state, onLoginClick = {
+                    loginViewModel.handleAction(LoginUiAction.NavigateToMain)
                 })
+                LaunchedEffect(state) {
+                    if (state.navigateToMain) {
+                        navController.navigate("main")
+                    }
+                }
             }
             composable("main") {
                 MainScreenView(navController = navController)
