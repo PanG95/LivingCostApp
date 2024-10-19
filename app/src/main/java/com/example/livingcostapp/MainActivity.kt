@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +17,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.livingcostapp.presentation.login.LoginScreenView
 import com.example.livingcostapp.presentation.login.LoginUiAction
 import com.example.livingcostapp.presentation.login.LoginViewModel
+import com.example.livingcostapp.presentation.mainScreen.MainNavigationTarget
 import com.example.livingcostapp.presentation.mainScreen.MainScreenView
+import com.example.livingcostapp.presentation.mainScreen.MainScreenViewModel
+import com.example.livingcostapp.presentation.mainScreen.MainUiAction
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsScreenView
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesScreenView
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
@@ -31,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
     private val welcomeViewModel: WelcomeViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val mainScreenViewModel: MainScreenViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +42,12 @@ class MainActivity : ComponentActivity() {
             LivingCostAppTheme {
                 val navController = rememberNavController()
                 MyApp {
-                    AppNavigator(navController, welcomeViewModel, loginViewModel)
+                    AppNavigator(
+                        navController,
+                        welcomeViewModel,
+                        loginViewModel,
+                        mainScreenViewModel
+                    )
                 }
             }
         }
@@ -58,7 +66,8 @@ class MainActivity : ComponentActivity() {
     fun AppNavigator(
         navController: NavHostController,
         welcomeViewModel: WelcomeViewModel,
-        loginViewModel: LoginViewModel
+        loginViewModel: LoginViewModel,
+        mainScreenViewModel: MainScreenViewModel
     ) {
 
         NavHost(navController = navController, startDestination = "welcome") {
@@ -87,7 +96,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
             composable("main") {
-                MainScreenView(navController = navController)
+                val state by mainScreenViewModel.state.collectAsState()
+
+                MainScreenView(state = state, onNavigateToEarnings = {
+                    mainScreenViewModel.handleAction(MainUiAction.NavigateToEarnings)
+                }, onNavigateToExpenses = {
+                    mainScreenViewModel.handleAction(MainUiAction.NavigateToExpenses)
+                }, onNavigateToSavings = {
+                    mainScreenViewModel.handleAction(MainUiAction.NavigateToSavings)
+                })
+                LaunchedEffect(state) {
+                    when (state.navigationTarget) {
+                        MainNavigationTarget.Earnings -> navController.navigate("earnings")
+                        MainNavigationTarget.Expenses -> navController.navigate("expenses")
+                        MainNavigationTarget.Savings -> navController.navigate("savings")
+                        else -> Unit
+                    }
+                }
             }
             composable("savings") {
                 SavingsScreenView()

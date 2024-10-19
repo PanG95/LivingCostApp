@@ -35,7 +35,11 @@ import androidx.compose.ui.res.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenView(navController: NavController) {
+fun MainScreenView(
+    state: MainScreenState, onNavigateToEarnings: () -> Unit,
+    onNavigateToExpenses: () -> Unit,
+    onNavigateToSavings: () -> Unit
+) {
 
     val expensesState = remember { mutableStateOf(0) }
     val earningsState = remember { mutableStateOf(0) }
@@ -96,8 +100,7 @@ fun MainScreenView(navController: NavController) {
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            navController.navigate("expenses")
-                            expensesState.value += 400
+                            onNavigateToExpenses
                         },
                     contentAlignment = Alignment.Center
 
@@ -143,8 +146,7 @@ fun MainScreenView(navController: NavController) {
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            navController.navigate("earnings")
-                            earningsState.value += 900
+                            onNavigateToEarnings
                         },
                     contentAlignment = Alignment.Center
 
@@ -189,8 +191,7 @@ fun MainScreenView(navController: NavController) {
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            navController.navigate("savings")
-                            savingsState.value += 200
+                            onNavigateToSavings
                         },
                     contentAlignment = Alignment.Center
 
@@ -235,9 +236,9 @@ fun MainScreenView(navController: NavController) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewMainScreen() {
-    val navController = rememberNavController()
-    MainScreenView(navController = navController)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewMainScreen() {
+//    val navController = rememberNavController()
+//    MainScreenView(navController = navController)
+//}
