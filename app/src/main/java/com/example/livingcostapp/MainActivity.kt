@@ -10,10 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.livingcostapp.data.repository.TransactionDatabase
+import com.example.livingcostapp.domain.repository.TransactionRepository
 import com.example.livingcostapp.presentation.login.LoginScreenView
 import com.example.livingcostapp.presentation.login.LoginUiAction
 import com.example.livingcostapp.presentation.login.LoginViewModel
@@ -22,6 +25,7 @@ import com.example.livingcostapp.presentation.mainScreen.MainScreenView
 import com.example.livingcostapp.presentation.mainScreen.MainScreenViewModel
 import com.example.livingcostapp.presentation.mainScreen.MainUiAction
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsScreenView
+import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModel
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesScreenView
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
@@ -31,13 +35,22 @@ import com.example.livingcostapp.ui.theme.LivingCostAppTheme
 
 class MainActivity : ComponentActivity() {
 
+
     private val welcomeViewModel: WelcomeViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
-    private val mainScreenViewModel: MainScreenViewModel by viewModels()
 
-
+    //  private val earningsViewModel: EarningsViewModel by viewModels()
+    private lateinit var repository: TransactionRepository
+    private lateinit var mainScreenViewModel: MainScreenViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val transactionDao = TransactionDatabase.getDatabase(applicationContext).transactionDao()
+        repository = TransactionRepository(transactionDao)
+
+        // Stwórz ViewModel przy użyciu fabryki
+        val factory = MainScreenViewModelFactory(repository)
+        mainScreenViewModel = ViewModelProvider(this, factory).get(MainScreenViewModel::class.java)
+
         setContent {
             LivingCostAppTheme {
                 val navController = rememberNavController()
@@ -46,7 +59,8 @@ class MainActivity : ComponentActivity() {
                         navController,
                         welcomeViewModel,
                         loginViewModel,
-                        mainScreenViewModel
+                        mainScreenViewModel,
+                        // earningsViewModel
                     )
                 }
             }
@@ -67,7 +81,8 @@ class MainActivity : ComponentActivity() {
         navController: NavHostController,
         welcomeViewModel: WelcomeViewModel,
         loginViewModel: LoginViewModel,
-        mainScreenViewModel: MainScreenViewModel
+        mainScreenViewModel: MainScreenViewModel,
+//earningsViewModel: EarningsViewModel
     ) {
 
         NavHost(navController = navController, startDestination = "welcome") {
@@ -121,10 +136,12 @@ class MainActivity : ComponentActivity() {
                 ExpensesScreenView()
             }
             composable("earnings") {
-                EarningsScreenView()
+//                val state by earningsViewModel.state.collectAsState()
+//                EarningsScreenView()
             }
         }
     }
+}
 
 
 //    @Preview(showBackground = true)
@@ -140,4 +157,3 @@ class MainActivity : ComponentActivity() {
 //            supportFragmen00tManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 //        return navHostFragment.navController.navigateUp() || super.onSupportNavigateUp()
 //    }
-}

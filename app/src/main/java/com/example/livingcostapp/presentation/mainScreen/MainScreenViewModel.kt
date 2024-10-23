@@ -1,11 +1,20 @@
 package com.example.livingcostapp.presentation.mainScreen
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.livingcostapp.data.model.TransactionLiveCost
+import com.example.livingcostapp.data.model.TransactionType
+import com.example.livingcostapp.domain.repository.TransactionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class MainScreenViewModel : ViewModel() {
+class MainScreenViewModel(private val repository: TransactionRepository) : ViewModel() {
+
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState> = _state
 
@@ -24,4 +33,18 @@ class MainScreenViewModel : ViewModel() {
             }
         }
     }
+
+    fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionLiveCost>> {
+        return repository.getTransactionsByType(type) ?: MutableLiveData(emptyList())
+    }
+
+    fun insert(transactionLiveCost: TransactionLiveCost) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(transactionLiveCost)
+    }
+
+    fun delete(transactionLiveCost: TransactionLiveCost) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(transactionLiveCost)
+    }
 }
+
+
