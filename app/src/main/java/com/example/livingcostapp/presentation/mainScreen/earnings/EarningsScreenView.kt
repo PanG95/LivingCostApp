@@ -76,7 +76,7 @@ fun EarningsScreenViewContent(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Wydatki:")
+            Text(text = "Dochody:")
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = amountInput,
