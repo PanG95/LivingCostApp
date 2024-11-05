@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.flow.StateFlow
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,12 +41,14 @@ import androidx.compose.ui.res.stringResource
 fun MainScreenView(
     state: MainScreenState, onNavigateToEarnings: () -> Unit,
     onNavigateToExpenses: () -> Unit,
-    onNavigateToSavings: () -> Unit
+    onNavigateToSavings: () -> Unit,
+    totalIncome: StateFlow<Double>,
 ) {
 
     val expensesState = remember { mutableStateOf(0) }
     val earningsState = remember { mutableStateOf(0) }
     val savingsState = remember { mutableStateOf(0) }
+    val income by totalIncome.collectAsState()
 
     Scaffold(
         topBar = {
@@ -100,7 +105,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToExpenses
+                            onNavigateToExpenses()
                         },
                     contentAlignment = Alignment.Center
 
@@ -146,7 +151,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToEarnings
+                            onNavigateToEarnings()
                         },
                     contentAlignment = Alignment.Center
 
@@ -175,7 +180,7 @@ fun MainScreenView(
                                 .padding(9.dp)
                         ) {
                             Text(
-                                text = "${earningsState.value}",
+                                text = "$income",
                                 fontSize = 20.sp,
                                 color = Color.White,
                                 modifier = Modifier
@@ -191,7 +196,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToSavings
+                            onNavigateToSavings()
                         },
                     contentAlignment = Alignment.Center
 

@@ -33,6 +33,9 @@ class MainScreenViewModel(private val repository: TransactionRepository) : ViewM
             }
         }
     }
+    fun resetNavigation() {
+        _state.update { it.copy(navigationTarget = null) }
+    }
 
     fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionLiveCost>> {
         return repository.getTransactionsByType(type) ?: MutableLiveData(emptyList())
