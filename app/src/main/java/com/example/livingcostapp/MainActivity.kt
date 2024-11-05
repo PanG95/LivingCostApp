@@ -29,6 +29,9 @@ import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsUiActi
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModel
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModelFactory
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesScreenView
+import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesUIAction
+import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModel
+import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModelFactory
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
 import com.example.livingcostapp.presentation.welcome.WelcomeUiAction
@@ -44,6 +47,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var earningsViewModel: EarningsViewModel
     private lateinit var repository: TransactionRepository
     private lateinit var mainScreenViewModel: MainScreenViewModel
+    private lateinit var expensesViewModel: ExpensesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +57,15 @@ class MainActivity : ComponentActivity() {
 
         val mainScreenFactory = MainScreenViewModelFactory(repository)
         mainScreenViewModel =
-            ViewModelProvider(this, mainScreenFactory).get(MainScreenViewModel::class.java)
+            ViewModelProvider(this, mainScreenFactory)[MainScreenViewModel::class.java]
 
         val earningsFactory = EarningsViewModelFactory(repository)
         earningsViewModel =
-            ViewModelProvider(this, earningsFactory).get(EarningsViewModel::class.java)
+            ViewModelProvider(this, earningsFactory)[EarningsViewModel::class.java]
+
+        val expensesFactory = ExpensesViewModelFactory(repository)
+        expensesViewModel =
+            ViewModelProvider(this, expensesFactory)[ExpensesViewModel::class.java]
 
         setContent {
             LivingCostAppTheme {
@@ -68,7 +76,8 @@ class MainActivity : ComponentActivity() {
                         welcomeViewModel,
                         loginViewModel,
                         mainScreenViewModel,
-                        earningsViewModel
+                        earningsViewModel,
+                        expensesViewModel
                     )
                 }
             }
@@ -90,7 +99,8 @@ class MainActivity : ComponentActivity() {
         welcomeViewModel: WelcomeViewModel,
         loginViewModel: LoginViewModel,
         mainScreenViewModel: MainScreenViewModel,
-        earningsViewModel: EarningsViewModel
+        earningsViewModel: EarningsViewModel,
+        expensesViewModel: ExpensesViewModel
     ) {
 
         NavHost(navController = navController, startDestination = "welcome") {
@@ -143,7 +153,9 @@ class MainActivity : ComponentActivity() {
                             mainScreenViewModel.resetNavigation()
                         }
 
-                        MainNavigationTarget.Expenses -> navController.navigate("expenses")
+                        MainNavigationTarget.Expenses -> navController.navigate("expenses") {
+                            mainScreenViewModel.resetNavigation()
+                        }
                         MainNavigationTarget.Savings -> navController.navigate("savings")
                         else -> Unit
                     }
@@ -153,7 +165,15 @@ class MainActivity : ComponentActivity() {
                 SavingsScreenView()
             }
             composable("expenses") {
-                ExpensesScreenView()
+                val state by expensesViewModel.state.collectAsState()
+                val totalExpenses = expensesViewModel.totalExpenses
+                ExpensesScreenView(
+                    state = state,
+                    navController = navController,
+                    totalExpenses = totalExpenses,
+                    onAddExpenses = { amount ->
+                        expensesViewModel.handleAction(ExpensesUIAction.AddExpenses(amount))
+                    })
             }
             composable("earnings") {
                 val state by earningsViewModel.state.collectAsState()
