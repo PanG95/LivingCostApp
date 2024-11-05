@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +61,11 @@ fun EarningsScreenViewContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val mockRepository = MockTransactionRepository()
     val income by totalIncome.collectAsState()
+    LaunchedEffect(Unit) {
+        onAddIncome(0.0)
+        // Wywołanie logiki przeliczania (w przypadku EarningsViewModel można dodać metodę do przypomnienia o potrzebie przeliczenia)
+        // Na przykład: earningsViewModel.calculateTotalIncome() - ta metoda będzie zależała od dostępności earningsViewModel
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()

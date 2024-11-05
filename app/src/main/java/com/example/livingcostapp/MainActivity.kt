@@ -123,14 +123,20 @@ class MainActivity : ComponentActivity() {
             }
             composable("main") {
                 val state by mainScreenViewModel.state.collectAsState()
-
-                MainScreenView(state = state, onNavigateToEarnings = {
-                    mainScreenViewModel.handleAction(MainUiAction.NavigateToEarnings)
-                }, onNavigateToExpenses = {
-                    mainScreenViewModel.handleAction(MainUiAction.NavigateToExpenses)
-                }, onNavigateToSavings = {
-                    mainScreenViewModel.handleAction(MainUiAction.NavigateToSavings)
-                })
+                val totalIncome = earningsViewModel.totalIncome
+                MainScreenView(
+                    state = state,
+                    onNavigateToEarnings = {
+                        mainScreenViewModel.handleAction(MainUiAction.NavigateToEarnings)
+                    },
+                    onNavigateToExpenses = {
+                        mainScreenViewModel.handleAction(MainUiAction.NavigateToExpenses)
+                    },
+                    onNavigateToSavings = {
+                        mainScreenViewModel.handleAction(MainUiAction.NavigateToSavings)
+                    },
+                    totalIncome = totalIncome
+                )
                 LaunchedEffect(state) {
                     when (state.navigationTarget) {
                         MainNavigationTarget.Earnings -> navController.navigate("earnings") {
@@ -165,7 +171,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 
 //    @Preview(showBackground = true)
