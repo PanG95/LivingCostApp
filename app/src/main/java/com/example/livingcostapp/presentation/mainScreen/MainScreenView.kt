@@ -100,7 +100,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToExpenses
+                            onNavigateToExpenses()
                         },
                     contentAlignment = Alignment.Center
 
@@ -146,7 +146,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToEarnings
+                            onNavigateToEarnings()
                         },
                     contentAlignment = Alignment.Center
 
@@ -191,7 +191,7 @@ fun MainScreenView(
                         .wrapContentHeight()
                         .background(Color.LightGray)
                         .clickable {
-                            onNavigateToSavings
+                            onNavigateToSavings()
                         },
                     contentAlignment = Alignment.Center
 

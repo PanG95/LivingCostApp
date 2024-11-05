@@ -25,7 +25,9 @@ import com.example.livingcostapp.presentation.mainScreen.MainScreenView
 import com.example.livingcostapp.presentation.mainScreen.MainScreenViewModel
 import com.example.livingcostapp.presentation.mainScreen.MainUiAction
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsScreenView
+import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsUiAction
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModel
+import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModelFactory
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesScreenView
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
@@ -39,17 +41,23 @@ class MainActivity : ComponentActivity() {
     private val welcomeViewModel: WelcomeViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
-    //  private val earningsViewModel: EarningsViewModel by viewModels()
+    private lateinit var earningsViewModel: EarningsViewModel
     private lateinit var repository: TransactionRepository
     private lateinit var mainScreenViewModel: MainScreenViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val transactionDao = TransactionDatabase.getDatabase(applicationContext).transactionDao()
         repository = TransactionRepository(transactionDao)
 
-        // Stwórz ViewModel przy użyciu fabryki
-        val factory = MainScreenViewModelFactory(repository)
-        mainScreenViewModel = ViewModelProvider(this, factory).get(MainScreenViewModel::class.java)
+
+        val mainScreenFactory = MainScreenViewModelFactory(repository)
+        mainScreenViewModel =
+            ViewModelProvider(this, mainScreenFactory).get(MainScreenViewModel::class.java)
+
+        val earningsFactory = EarningsViewModelFactory(repository)
+        earningsViewModel =
+            ViewModelProvider(this, earningsFactory).get(EarningsViewModel::class.java)
 
         setContent {
             LivingCostAppTheme {
@@ -60,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         welcomeViewModel,
                         loginViewModel,
                         mainScreenViewModel,
-                        // earningsViewModel
+                        earningsViewModel
                     )
                 }
             }
@@ -82,7 +90,7 @@ class MainActivity : ComponentActivity() {
         welcomeViewModel: WelcomeViewModel,
         loginViewModel: LoginViewModel,
         mainScreenViewModel: MainScreenViewModel,
-//earningsViewModel: EarningsViewModel
+        earningsViewModel: EarningsViewModel
     ) {
 
         NavHost(navController = navController, startDestination = "welcome") {
@@ -106,7 +114,10 @@ class MainActivity : ComponentActivity() {
                 })
                 LaunchedEffect(state) {
                     if (state.navigateToMain) {
-                        navController.navigate("main")
+                        navController.navigate("main") {
+                            popUpTo("welcome") { inclusive = true }
+                        }
+
                     }
                 }
             }
@@ -122,7 +133,10 @@ class MainActivity : ComponentActivity() {
                 })
                 LaunchedEffect(state) {
                     when (state.navigationTarget) {
-                        MainNavigationTarget.Earnings -> navController.navigate("earnings")
+                        MainNavigationTarget.Earnings -> navController.navigate("earnings") {
+                            mainScreenViewModel.resetNavigation()
+                        }
+
                         MainNavigationTarget.Expenses -> navController.navigate("expenses")
                         MainNavigationTarget.Savings -> navController.navigate("savings")
                         else -> Unit
@@ -136,12 +150,22 @@ class MainActivity : ComponentActivity() {
                 ExpensesScreenView()
             }
             composable("earnings") {
-//                val state by earningsViewModel.state.collectAsState()
-//                EarningsScreenView()
+                val state by earningsViewModel.state.collectAsState()
+                val totalIncome = earningsViewModel.totalIncome
+
+                EarningsScreenView(
+                    state = state,
+                    navController = navController,
+                    totalIncome = totalIncome,
+                    onAddIncome = { amount ->
+                        earningsViewModel.handleAction(EarningsUiAction.AddIncome(amount))
+                    }
+                )
             }
         }
     }
 }
+
 
 
 //    @Preview(showBackground = true)

@@ -5,16 +5,16 @@ import com.example.livingcostapp.data.model.TransactionLiveCost
 import com.example.livingcostapp.data.model.TransactionDao
 import com.example.livingcostapp.data.model.TransactionType
 
-class TransactionRepository(private val transactionDao: TransactionDao) {
-    fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionLiveCost>> {
+open class TransactionRepository(private val transactionDao: TransactionDao) {
+    open fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionLiveCost>> {
         return transactionDao.getTransactionsByType(type)
     }
 
-    suspend fun insert(transactionLiveCost: TransactionLiveCost) {
+    open suspend fun insert(transactionLiveCost: TransactionLiveCost) {
         transactionDao.insert(transactionLiveCost)
     }
 
-    suspend fun delete(transactionLiveCost: TransactionLiveCost) {
+    open suspend fun delete(transactionLiveCost: TransactionLiveCost) {
         transactionDao.delete(transactionLiveCost)
     }
 }
