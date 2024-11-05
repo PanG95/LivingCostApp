@@ -43,12 +43,14 @@ fun MainScreenView(
     onNavigateToExpenses: () -> Unit,
     onNavigateToSavings: () -> Unit,
     totalIncome: StateFlow<Double>,
+    totalExpenses :StateFlow<Double>
 ) {
 
     val expensesState = remember { mutableStateOf(0) }
     val earningsState = remember { mutableStateOf(0) }
     val savingsState = remember { mutableStateOf(0) }
     val income by totalIncome.collectAsState()
+    val expenses by totalExpenses.collectAsState()
 
     Scaffold(
         topBar = {
@@ -134,7 +136,7 @@ fun MainScreenView(
                                 .padding(9.dp)
                         ) {
                             Text(
-                                text = "${expensesState.value}",
+                                text = "$expenses",
                                 fontSize = 20.sp,
                                 color = Color.White,
                                 modifier = Modifier

@@ -28,8 +28,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.LivingCostApp.R
 import com.example.livingcostapp.mock.MockTransactionRepository
 import com.example.livingcostapp.presentation.mainScreen.earnings.EarningsViewModel
+import com.example.livingcostapp.presentation.utils.string
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -66,12 +68,12 @@ fun ExpensesScreenViewContent(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Wydatki:")
+            Text(text = string(id = R.string.expenses))
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = amountInput,
                 onValueChange = { newValue -> amountInput = newValue },
-                label = { Text(text = "Dodaj kwotę") },
+                label = { Text(text = string(id = R.string.add_amount)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -87,11 +89,11 @@ fun ExpensesScreenViewContent(
                     keyboardController?.hide()
                 }
             }) {
-                Text(text = "Dodaj Wydatek")
+                Text(text = string(id = R.string.add_expenses))
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Twoje Wydatki: $expenses",
+                text = string(R.string.your_expenses) + expenses,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
