@@ -33,6 +33,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.stringResource
+import com.example.livingcostapp.ui.theme.calmGreen
+import com.example.livingcostapp.ui.theme.grayTextColor
+import com.example.livingcostapp.ui.theme.pastelBlue
+import com.example.livingcostapp.ui.theme.softRed
 import kotlinx.coroutines.flow.StateFlow
 
 
@@ -109,7 +113,11 @@ fun MainScreenView(
                         .padding(bottom = 24.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            softRed,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToExpenses()
                         },
@@ -126,6 +134,7 @@ fun MainScreenView(
                             text = "Wydatki",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -137,7 +146,7 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
                                 text = "$expenses",
@@ -155,7 +164,11 @@ fun MainScreenView(
                         .padding(bottom = 24.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            pastelBlue,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToEarnings()
                         },
@@ -172,6 +185,7 @@ fun MainScreenView(
                             text = "Przychód",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -183,7 +197,7 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
                                 text = "$income",
@@ -200,7 +214,11 @@ fun MainScreenView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            calmGreen,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToSavings()
                         },
@@ -217,6 +235,7 @@ fun MainScreenView(
                             text = "Oszczędności",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -228,7 +247,7 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
                                 text = "$savings",
