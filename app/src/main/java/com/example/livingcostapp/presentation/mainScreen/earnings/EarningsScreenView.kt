@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,11 +34,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.LivingCostApp.R
 import com.example.livingcostapp.data.model.TransactionDao
 import com.example.livingcostapp.data.model.TransactionLiveCost
 import com.example.livingcostapp.data.model.TransactionType
 import com.example.livingcostapp.domain.repository.TransactionRepository
 import com.example.livingcostapp.mock.MockTransactionRepository
+import com.example.livingcostapp.presentation.utils.string
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -47,7 +50,7 @@ fun EarningsScreenView(
     onAddIncome: (Double) -> Unit,
     totalIncome: StateFlow<Double>,
 ) {
-    EarningsScreenViewContent(state, navController,totalIncome, onAddIncome)
+    EarningsScreenViewContent(state, navController, totalIncome, onAddIncome)
 }
 
 @Composable
@@ -63,8 +66,6 @@ fun EarningsScreenViewContent(
     val income by totalIncome.collectAsState()
     LaunchedEffect(Unit) {
         onAddIncome(0.0)
-        // Wywołanie logiki przeliczania (w przypadku EarningsViewModel można dodać metodę do przypomnienia o potrzebie przeliczenia)
-        // Na przykład: earningsViewModel.calculateTotalIncome() - ta metoda będzie zależała od dostępności earningsViewModel
     }
     Box(
         modifier = Modifier
@@ -76,12 +77,12 @@ fun EarningsScreenViewContent(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Dochody:")
+            Text(text = string(id = R.string.incomes))
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = amountInput,
                 onValueChange = { newValue -> amountInput = newValue },
-                label = { Text(text = "Dodaj kwotę") },
+                label = { Text(text = string(id = R.string.add_amount)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
@@ -97,11 +98,13 @@ fun EarningsScreenViewContent(
                     keyboardController?.hide()
                 }
             }) {
-                Text(text = "Dodaj dochód")
+                Text(text = string(id = R.string.add_income))
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Twoje Przychody: $income",
+                text = string(
+                    R.string.your_income
+                ) + income,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )

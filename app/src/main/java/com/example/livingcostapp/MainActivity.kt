@@ -134,6 +134,7 @@ class MainActivity : ComponentActivity() {
             composable("main") {
                 val state by mainScreenViewModel.state.collectAsState()
                 val totalIncome = earningsViewModel.totalIncome
+                val totalExpenses = expensesViewModel.totalExpenses
                 MainScreenView(
                     state = state,
                     onNavigateToEarnings = {
@@ -145,6 +146,7 @@ class MainActivity : ComponentActivity() {
                     onNavigateToSavings = {
                         mainScreenViewModel.handleAction(MainUiAction.NavigateToSavings)
                     },
+                    totalExpenses = totalExpenses,
                     totalIncome = totalIncome
                 )
                 LaunchedEffect(state) {
