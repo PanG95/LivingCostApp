@@ -11,6 +11,10 @@ import java.util.Date
 
 @Dao
 interface TransactionDao {
+
+    @Query("SELECT * FROM transaction_table")
+    fun getAllTransactions(): LiveData<List<TransactionLiveCost>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(transactionLiveCost: TransactionLiveCost)
 

@@ -1,9 +1,12 @@
 package com.example.livingcostapp.domain.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import com.example.livingcostapp.data.model.TransactionLiveCost
 import com.example.livingcostapp.data.model.TransactionDao
 import com.example.livingcostapp.data.model.TransactionType
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
 open class TransactionRepository(private val transactionDao: TransactionDao) {
     open fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionLiveCost>> {
@@ -16,5 +19,9 @@ open class TransactionRepository(private val transactionDao: TransactionDao) {
 
     open suspend fun delete(transactionLiveCost: TransactionLiveCost) {
         transactionDao.delete(transactionLiveCost)
+    }
+
+    fun getAllTransactions(): Flow<List<TransactionLiveCost>> {
+        return transactionDao.getAllTransactions().asFlow()
     }
 }

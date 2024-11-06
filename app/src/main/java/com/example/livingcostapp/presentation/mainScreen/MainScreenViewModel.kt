@@ -17,6 +17,32 @@ class MainScreenViewModel(private val repository: TransactionRepository) : ViewM
 
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState> = _state
+    private val _totalIncome = MutableStateFlow(0.0)
+    val totalIncome: StateFlow<Double> = _totalIncome
+
+    private val _totalExpenses = MutableStateFlow(0.0)
+    val totalExpenses: StateFlow<Double> = _totalExpenses
+
+    private val _totalSavings = MutableStateFlow(0.0)
+    val totalSavings: StateFlow<Double> = _totalSavings
+    init {
+        loadAllTransactions()
+    }
+
+    private fun loadAllTransactions() {
+        viewModelScope.launch {
+            repository.getAllTransactions().collect { transactions ->
+                _state.update { it.copy(transactions = transactions) }
+
+                // Obliczenia na podstawie transakcji
+                _totalIncome.value =
+                    transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount }
+                _totalExpenses.value =
+                    transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
+                _totalSavings.value = _totalIncome.value - _totalExpenses.value
+            }
+        }
+    }
 
     fun handleAction(action: MainUiAction) {
         when (action) {
@@ -33,6 +59,7 @@ class MainScreenViewModel(private val repository: TransactionRepository) : ViewM
             }
         }
     }
+
     fun resetNavigation() {
         _state.update { it.copy(navigationTarget = null) }
     }
@@ -48,6 +75,7 @@ class MainScreenViewModel(private val repository: TransactionRepository) : ViewM
     fun delete(transactionLiveCost: TransactionLiveCost) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(transactionLiveCost)
     }
+
 }
 
 

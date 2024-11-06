@@ -33,6 +33,9 @@ import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesUIActi
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModel
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModelFactory
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
+import com.example.livingcostapp.presentation.mainScreen.savings.SavingsUIAction
+import com.example.livingcostapp.presentation.mainScreen.savings.SavingsViewModel
+import com.example.livingcostapp.presentation.mainScreen.savings.SavingsViewModelFactory
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
 import com.example.livingcostapp.presentation.welcome.WelcomeUiAction
 import com.example.livingcostapp.presentation.welcome.WelcomeViewModel
@@ -48,6 +51,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var repository: TransactionRepository
     private lateinit var mainScreenViewModel: MainScreenViewModel
     private lateinit var expensesViewModel: ExpensesViewModel
+    private lateinit var savingsViewModel: SavingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +71,11 @@ class MainActivity : ComponentActivity() {
         expensesViewModel =
             ViewModelProvider(this, expensesFactory)[ExpensesViewModel::class.java]
 
+        val savingsFactory = SavingsViewModelFactory(repository)
+        savingsViewModel =
+            ViewModelProvider(this, savingsFactory)[SavingsViewModel::class.java]
+
+
         setContent {
             LivingCostAppTheme {
                 val navController = rememberNavController()
@@ -77,7 +86,8 @@ class MainActivity : ComponentActivity() {
                         loginViewModel,
                         mainScreenViewModel,
                         earningsViewModel,
-                        expensesViewModel
+                        expensesViewModel,
+                        savingsViewModel,
                     )
                 }
             }
@@ -100,7 +110,8 @@ class MainActivity : ComponentActivity() {
         loginViewModel: LoginViewModel,
         mainScreenViewModel: MainScreenViewModel,
         earningsViewModel: EarningsViewModel,
-        expensesViewModel: ExpensesViewModel
+        expensesViewModel: ExpensesViewModel,
+        savingsViewModel: SavingsViewModel
     ) {
 
         NavHost(navController = navController, startDestination = "welcome") {
@@ -135,6 +146,7 @@ class MainActivity : ComponentActivity() {
                 val state by mainScreenViewModel.state.collectAsState()
                 val totalIncome = earningsViewModel.totalIncome
                 val totalExpenses = expensesViewModel.totalExpenses
+                val totalSavings = savingsViewModel.totalSavings
                 MainScreenView(
                     state = state,
                     onNavigateToEarnings = {
@@ -147,7 +159,9 @@ class MainActivity : ComponentActivity() {
                         mainScreenViewModel.handleAction(MainUiAction.NavigateToSavings)
                     },
                     totalExpenses = totalExpenses,
-                    totalIncome = totalIncome
+                    totalIncome = totalIncome,
+                    totalSavings = totalSavings,
+                    viewModel = MainScreenViewModel(repository)
                 )
                 LaunchedEffect(state) {
                     when (state.navigationTarget) {
@@ -158,13 +172,22 @@ class MainActivity : ComponentActivity() {
                         MainNavigationTarget.Expenses -> navController.navigate("expenses") {
                             mainScreenViewModel.resetNavigation()
                         }
+
                         MainNavigationTarget.Savings -> navController.navigate("savings")
                         else -> Unit
                     }
                 }
             }
             composable("savings") {
-                SavingsScreenView()
+                val state by savingsViewModel.state.collectAsState()
+                val totalSavings = savingsViewModel.totalSavings
+                SavingsScreenView(
+                    state = state,
+                    navController = navController,
+                    totalSavings = totalSavings,
+                    onAddSavings = { amount ->
+                        savingsViewModel.handleAction(SavingsUIAction.AddSavings(amount))
+                    })
             }
             composable("expenses") {
                 val state by expensesViewModel.state.collectAsState()
