@@ -5,15 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,10 +31,11 @@ import kotlinx.coroutines.flow.StateFlow
 fun SavingsScreenView(
     state: SavingsViewModel.SavingsScreenState,
     navController: NavHostController,
-    onAddSavings: (Double) -> Unit,
     totalSavings: StateFlow<Double>,
+    viewModel: SavingsViewModel,
 ) {
-    EarningsScreenViewContent(state, navController, totalSavings, onAddSavings)
+    EarningsScreenViewContent(state, navController, totalSavings, viewModel
+    )
 }
 
 @Composable
@@ -49,12 +43,13 @@ fun EarningsScreenViewContent(
     state: SavingsViewModel.SavingsScreenState,
     navController: NavHostController,
     totalSavings: StateFlow<Double>,
-    onAddSavings: (Double) -> Unit
+    viewModel: SavingsViewModel
 ) {
     var amountInput by remember { mutableStateOf(TextFieldValue("")) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val mockRepository = MockTransactionRepository()
-    val savings by totalSavings.collectAsState()
+    val savings by viewModel.totalSavings.collectAsState()
+
 
     Box(
         modifier = Modifier

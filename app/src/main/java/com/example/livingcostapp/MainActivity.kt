@@ -33,7 +33,6 @@ import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesUIActi
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModel
 import com.example.livingcostapp.presentation.mainScreen.expenses.ExpensesViewModelFactory
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsScreenView
-import com.example.livingcostapp.presentation.mainScreen.savings.SavingsUIAction
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsViewModel
 import com.example.livingcostapp.presentation.mainScreen.savings.SavingsViewModelFactory
 import com.example.livingcostapp.presentation.welcome.WelcomeScreenView
@@ -185,9 +184,8 @@ class MainActivity : ComponentActivity() {
                     state = state,
                     navController = navController,
                     totalSavings = totalSavings,
-                    onAddSavings = { amount ->
-                        savingsViewModel.handleAction(SavingsUIAction.AddSavings(amount))
-                    })
+                    viewModel = SavingsViewModel(repository)
+                )
             }
             composable("expenses") {
                 val state by expensesViewModel.state.collectAsState()
