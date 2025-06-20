@@ -9,7 +9,8 @@ data class TransactionLiveCost(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val amount: Double,
     val date: Date? = null,
-    val type: TransactionType
+    val type: TransactionType,
+    val category: String
 )
 
 //class Converters {
