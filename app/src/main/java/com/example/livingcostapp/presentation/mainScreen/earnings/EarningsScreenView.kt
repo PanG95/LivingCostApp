@@ -10,8 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -42,6 +47,9 @@ import com.example.livingcostapp.domain.repository.TransactionRepository
 import com.example.livingcostapp.mock.MockTransactionRepository
 import com.example.livingcostapp.presentation.utils.string
 import kotlinx.coroutines.flow.StateFlow
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun EarningsScreenView(
@@ -53,6 +61,7 @@ fun EarningsScreenView(
     EarningsScreenViewContent(state, navController, totalIncome, onAddIncome)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EarningsScreenViewContent(
     state: EarningsViewModel.EarningsScreenState,
@@ -64,6 +73,9 @@ fun EarningsScreenViewContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val mockRepository = MockTransactionRepository()
     val income by totalIncome.collectAsState()
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+    val selectedDate = datePickerState.selectedDateMillis?.let { Instant.ofEpochMilli(it).atZone(
+        ZoneId.systemDefault()).toLocalDate() }
     LaunchedEffect(Unit) {
         onAddIncome(0.0)
     }
@@ -110,6 +122,24 @@ fun EarningsScreenViewContent(
             )
         }
     }
+//    DatePickerDialog(
+//        onDismissRequest = { /* ... */ },
+//        confirmButton = {
+//            TextButton(onClick = {
+//                val finalDate = selectedDate ?: LocalDate.now()
+//                viewModel.addIncome(amount, finalDate)
+//            }) {
+//                Text("OK")
+//            }
+//        },
+//        dismissButton = {
+//            TextButton(onClick = { /* ... */ }) {
+//                Text("Anuluj")
+//            }
+//        }
+//    ) {
+//        DatePicker(state = datePickerState)
+//    }
 }
 
 // Preview Composable function to visualize the EarningsScreenViewContent

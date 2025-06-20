@@ -2,13 +2,14 @@ package com.example.livingcostapp.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 import java.util.Date
 
 @Entity(tableName = "transaction_table")
 data class TransactionLiveCost(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val amount: Double,
-    val date: Date? = null,
+    val date: LocalDate = LocalDate.now(),
     val type: TransactionType,
     val category: String
 )
