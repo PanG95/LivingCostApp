@@ -215,6 +215,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+//enum class Month(val displayName: String) {
+//    JANUARY("Styczeń"), FEBRUARY("Luty"), MARCH("Marzec"), APRIL("Kwiecień"),
+//    MAY("Maj"), JUNE("Czerwiec"), JULY("Lipiec"), AUGUST("Sierpień"),
+//    SEPTEMBER("Wrzesień"), OCTOBER("Październik"), NOVEMBER("Listopad"), DECEMBER("Grudzień")
+//}
+
 
 //    @Preview(showBackground = true)
 //    @Composable
