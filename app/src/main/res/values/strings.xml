@@ -6,7 +6,10 @@
     <string name="your_income">Twoje Przychody:</string>
     <string name="your_expenses">Twoje Przychody:</string>
     <string name="expenses_label">Wydatki:</string>
+    <string name="savings_label">Wydatki:</string>
     <string name="add_amount">Dodaj kwotę</string>
     <string name="incomes">Dochody</string>
     <string name="expenses">Wydatki</string>
+    <string name="your_savings">Twoje Oszczędności:</string>
+    <string name="add_savings">Dodaj wydatek</string>
 </resources>

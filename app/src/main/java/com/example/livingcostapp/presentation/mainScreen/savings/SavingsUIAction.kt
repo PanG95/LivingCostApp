@@ -1,4 +1,5 @@
 package com.example.livingcostapp.presentation.mainScreen.savings
 
-class SavingsUIAction {
+sealed class SavingsUIAction {
+    data class AddSavings(val amount: Double) : SavingsUIAction()
 }

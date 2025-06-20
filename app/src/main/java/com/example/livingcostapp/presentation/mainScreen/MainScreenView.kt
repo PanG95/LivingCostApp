@@ -33,6 +33,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.stringResource
+import com.example.livingcostapp.ui.theme.calmGreen
+import com.example.livingcostapp.ui.theme.grayTextColor
+import com.example.livingcostapp.ui.theme.pastelBlue
+import com.example.livingcostapp.ui.theme.softRed
 import kotlinx.coroutines.flow.StateFlow
 
 
@@ -43,14 +47,18 @@ fun MainScreenView(
     onNavigateToExpenses: () -> Unit,
     onNavigateToSavings: () -> Unit,
     totalIncome: StateFlow<Double>,
-    totalExpenses :StateFlow<Double>
+    totalExpenses: StateFlow<Double>,
+    totalSavings: StateFlow<Double>,
+    viewModel: MainScreenViewModel
+
 ) {
 
     val expensesState = remember { mutableStateOf(0) }
     val earningsState = remember { mutableStateOf(0) }
     val savingsState = remember { mutableStateOf(0) }
-    val income by totalIncome.collectAsState()
-    val expenses by totalExpenses.collectAsState()
+    val income by viewModel.totalIncome.collectAsState()
+    val expenses by viewModel.totalExpenses.collectAsState()
+    val savings by viewModel.totalSavings.collectAsState()
 
     Scaffold(
         topBar = {
@@ -105,7 +113,11 @@ fun MainScreenView(
                         .padding(bottom = 24.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            softRed,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToExpenses()
                         },
@@ -122,6 +134,7 @@ fun MainScreenView(
                             text = "Wydatki",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -133,7 +146,7 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
                                 text = "$expenses",
@@ -151,7 +164,11 @@ fun MainScreenView(
                         .padding(bottom = 24.dp)
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            pastelBlue,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToEarnings()
                         },
@@ -168,6 +185,7 @@ fun MainScreenView(
                             text = "Przychód",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -179,7 +197,7 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
                                 text = "$income",
@@ -196,7 +214,11 @@ fun MainScreenView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .background(Color.LightGray)
+                        .weight(1f)
+                        .background(
+                            calmGreen,
+                            shape = RoundedCornerShape(25.dp)
+                        )
                         .clickable {
                             onNavigateToSavings()
                         },
@@ -213,6 +235,7 @@ fun MainScreenView(
                             text = "Oszczędności",
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
+                            color = grayTextColor
                         )
 
                         Box(
@@ -224,10 +247,10 @@ fun MainScreenView(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .align(Alignment.CenterHorizontally)
-                                .padding(9.dp)
+                                .padding(15.dp)
                         ) {
                             Text(
-                                text = "${savingsState.value}",
+                                text = "$savings",
                                 fontSize = 20.sp,
                                 color = Color.White,
                                 modifier = Modifier
